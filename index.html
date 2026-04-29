@@ -1,803 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ShortsForge — Viral YouTube Shorts Script Generator</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6478772364302602"
-             crossorigin="anonymous"></script>
-<style>
-  :root {
-    --bg: #0b0d12;
-    --bg-2: #11141c;
-    --card: #161a24;
-    --card-2: #1c2130;
-    --border: #262c3d;
-    --text: #e7eaf3;
-    --muted: #9aa3b8;
-    --accent: #ff2e63;
-    --accent-2: #ff6b9a;
-    --accent-3: #7c5cff;
-    --good: #28d980;
-    --shadow: 0 10px 40px rgba(0,0,0,0.45);
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,0.18), transparent 60%),
-                radial-gradient(900px 500px at 110% 10%, rgba(255,46,99,0.18), transparent 60%),
-                var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.55;
-  }
-  .wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 32px 20px 80px;
-  }
-  header.top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
-    font-size: 20px;
-  }
-  .logo {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-3));
-    display: grid; place-items: center;
-    color: white;
-    box-shadow: var(--shadow);
-    font-weight: 900;
-  }
-  .tagline { color: var(--muted); font-size: 13px; }
-
-  .hero {
-    background: linear-gradient(180deg, var(--card), var(--bg-2));
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 28px;
-    box-shadow: var(--shadow);
-  }
-  .hero h1 {
-    margin: 0 0 8px;
-    font-size: 28px;
-    line-height: 1.2;
-  }
-  .hero p { margin: 0 0 22px; color: var(--muted); }
-
-  .input-row {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .input-row input {
-    flex: 1 1 320px;
-    min-width: 0;
-    background: var(--bg-2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .input-row input:focus {
-    border-color: var(--accent-3);
-    box-shadow: 0 0 0 3px rgba(124,92,255,0.25);
-  }
-  .btn {
-    cursor: pointer;
-    border: none;
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 14px 22px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-3));
-    transition: transform .08s ease, filter .15s ease, opacity .15s;
-    box-shadow: 0 6px 20px rgba(255,46,99,0.35);
-    display: inline-flex; align-items: center; gap: 10px;
-  }
-  .btn:hover { filter: brightness(1.08); }
-  .btn:active { transform: translateY(1px); }
-  .btn[disabled] { opacity: .65; cursor: not-allowed; }
-
-  .btn.secondary {
-    background: var(--card-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    box-shadow: none;
-    padding: 8px 12px;
-    font-size: 12px;
-    border-radius: 8px;
-    font-weight: 600;
-  }
-  .btn.secondary:hover { border-color: var(--accent-3); }
-
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .chip {
-    background: var(--card-2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: color .15s, border-color .15s;
-  }
-  .chip:hover { color: var(--text); border-color: var(--accent-3); }
-
-  /* Loader */
-  .loader {
-    display: none;
-    margin-top: 24px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-  }
-  .loader.show { display: block; }
-  .think {
-    display: flex; align-items: center; gap: 10px;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent-2);
-    animation: pulse 1s infinite ease-in-out;
-  }
-  .dot:nth-child(2) { animation-delay: .15s; background: var(--accent-3); }
-  .dot:nth-child(3) { animation-delay: .3s; background: var(--accent); }
-  @keyframes pulse {
-    0%, 80%, 100% { transform: scale(0.6); opacity: .5; }
-    40% { transform: scale(1); opacity: 1; }
-  }
-  .progress {
-    margin-top: 12px;
-    height: 6px;
-    background: var(--bg-2);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .progress > div {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-3));
-    transition: width .25s ease;
-  }
-  .think-line { color: var(--muted); margin-top: 10px; font-size: 13px; min-height: 18px; }
-
-  /* Results */
-  .results { margin-top: 28px; display: none; }
-  .results.show { display: block; }
-
-  .toolbar {
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
-  }
-  .toolbar h2 { margin: 0; font-size: 18px; }
-
-  .tabs {
-    display: flex; gap: 6px; flex-wrap: wrap;
-    background: var(--card);
-    padding: 6px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-  }
-  .tab {
-    cursor: pointer;
-    padding: 8px 14px;
-    border-radius: 8px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    background: transparent;
-  }
-  .tab.active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-3));
-    color: white;
-  }
-
-  .variation { display: none; }
-  .variation.active { display: block; animation: fade .3s ease; }
-  @keyframes fade { from { opacity: 0; transform: translateY(4px);} to {opacity: 1; transform: none;} }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 18px;
-    margin-bottom: 14px;
-  }
-  .card h3 {
-    margin: 0 0 10px;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  }
-  .card h3 .label { display: inline-flex; align-items: center; gap: 8px;}
-  .icon {
-    width: 22px; height: 22px;
-    border-radius: 6px;
-    display: grid; place-items: center;
-    background: var(--card-2);
-    color: var(--accent-2);
-    font-size: 12px;
-    font-weight: 900;
-  }
-  .body {
-    color: var(--text);
-    font-size: 15px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-  .hook .body {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.35;
-    background: linear-gradient(135deg, rgba(255,46,99,0.12), rgba(124,92,255,0.12));
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px dashed var(--border);
-  }
-  .title .body { font-size: 17px; font-weight: 700; }
-  .hashtags .body { color: var(--accent-2); font-weight: 600; }
-
-  .scene {
-    background: var(--card-2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-  }
-  .scene .head {
-    display: flex; justify-content: space-between; align-items: center;
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-  }
-  .scene .vo { font-weight: 600; }
-  .scene .visual { color: var(--muted); font-size: 14px; margin-top: 4px;}
-
-  .toast {
-    position: fixed;
-    bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--card-2);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 10px 16px;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity .2s, transform .2s;
-    pointer-events: none;
-    z-index: 50;
-  }
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  footer {
-    margin-top: 40px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 22px; }
-    .hero { padding: 20px; }
-    .input-row .btn { width: 100%; justify-content: center; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShortsForgeAI — Generate Viral YouTube Shorts Scripts in Seconds</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6478772364302602" crossorigin="anonymous"></script>
+  <style>
+    :root{--purple:#7c3aed;--purple-light:#a78bfa;--pink:#ec4899;--dark:#0f0f0f;--dark2:#1a1a2e;--card:#1e1e3f;--text:#e2e8f0;--muted:#94a3b8;--border:#2d2d5b}
+    *{margin:0;padding:0;box-sizing:border-box}body{background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6}
+    nav{position:sticky;top:0;z-index:100;background:rgba(15,15,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--purple-light),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .nav-links{display:flex;gap:28px;align-items:center}.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem}
+    .btn-nav{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff!important;padding:8px 20px;border-radius:8px;font-weight:700}
+    .hero{text-align:center;padding:100px 24px 80px;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.18) 0%,transparent 70%)}
+    .badge{display:inline-block;background:rgba(124,58,237,.2);border:1px solid var(--purple);color:var(--purple-light);padding:6px 16px;border-radius:50px;font-size:.8rem;font-weight:600;margin-bottom:24px}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.15;margin-bottom:20px}
+    .hero h1 span{background:linear-gradient(135deg,var(--purple-light),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{font-size:1.15rem;color:var(--muted);max-width:560px;margin:0 auto 40px}
+    .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;padding:14px 32px;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;border:none;cursor:pointer}
+    .btn-secondary{background:transparent;color:var(--text);padding:14px 32px;border-radius:10px;font-weight:600;font-size:1rem;text-decoration:none;border:1px solid var(--border);cursor:pointer}
+    .stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;padding:32px 24px;background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .stat{text-align:center}.stat-num{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--purple-light),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .stat-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    section{padding:80px 24px;max-width:1100px;margin:0 auto}
+    .section-label{text-align:center;color:var(--purple-light);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+    .section-title{text-align:center;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:16px}
+    .section-sub{text-align:center;color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto 52px}
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px}
+    .step{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px 28px;text-align:center}
+    .step-num{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;margin:0 auto 20px}
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .feature{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:border-color .2s,transform .2s}
+    .feature:hover{border-color:var(--purple-light);transform:translateY(-3px)}.feature-icon{font-size:2rem;margin-bottom:14px}
+    .generator-wrap{background:var(--dark2);padding:80px 0}.generator-inner{max-width:800px;margin:0 auto;padding:0 24px}
+    .gen-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px}
+    .gen-box label{display:block;font-weight:600;margin-bottom:10px}
+    .gen-box input,.gen-box select{width:100%;padding:12px 16px;background:var(--dark);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.95rem;margin-bottom:20px;outline:none}
+    .gen-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer}
+    .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+    .tab{padding:8px 20px;border-radius:8px;background:var(--dark);border:1px solid var(--border);color:var(--muted);font-size:.85rem;cursor:pointer}
+    .tab.active{background:var(--purple);border-color:var(--purple);color:#fff}
+    .output-box{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:20px;min-height:160px;font-size:.9rem;line-height:1.7;color:var(--text);white-space:pre-wrap}
+    .upgrade-gate{display:none;background:rgba(124,58,237,.1);border:1px solid var(--purple);border-radius:12px;padding:24px;text-align:center;margin-top:20px}
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px;max-width:700px;margin:0 auto}
+    .plan{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 32px;position:relative}
+    .plan.featured{border-color:var(--purple);box-shadow:0 0 40px rgba(124,58,237,.25)}
+    .plan-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;padding:4px 18px;border-radius:50px;font-size:.75rem;font-weight:700;white-space:nowrap}
+    .plan-name{font-size:1.1rem;font-weight:700;color:var(--muted);margin-bottom:12px}
+    .plan-price{font-size:3rem;font-weight:900;margin-bottom:4px}.plan-price span{font-size:1rem;font-weight:400;color:var(--muted)}
+    .plan-desc{color:var(--muted);font-size:.88rem;margin-bottom:28px}
+    .plan-features{list-style:none;margin-bottom:32px}
+    .plan-features li{padding:8px 0;font-size:.9rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+    .plan-features li:last-child{border-bottom:none}.check{color:#22c55e;font-weight:700}.cross{color:#ef4444}
+    .btn-plan{display:block;text-align:center;padding:14px;border-radius:10px;font-weight:700;font-size:.95rem;text-decoration:none;cursor:pointer;border:none;width:100%}
+    .btn-plan-free{background:var(--dark);border:1px solid var(--border);color:var(--text)}.btn-plan-paid{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff}
+    .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+    .testi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px}
+    .testi-stars{color:#facc15;margin-bottom:12px}.testi-text{color:var(--muted);font-size:.9rem;margin-bottom:20px;line-height:1.65}
+    .faq{max-width:720px;margin:0 auto}.faq-item{border-bottom:1px solid var(--border)}
+    .faq-q{padding:20px 0;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+    .faq-icon{font-size:1.2rem;color:var(--purple-light);transition:transform .3s}
+    .faq-a{display:none;padding:0 0 20px;color:var(--muted);font-size:.9rem;line-height:1.7}
+    .faq-item.open .faq-a{display:block}.faq-item.open .faq-icon{transform:rotate(45deg)}
+    .final-cta{text-align:center;padding:90px 24px;background:radial-gradient(ellipse at 50% 50%,rgba(124,58,237,.15) 0%,transparent 70%);border-top:1px solid var(--border)}
+    footer{background:var(--dark2);border-top:1px solid var(--border);padding:36px 24px;text-align:center}
+    footer p{color:var(--muted);font-size:.82rem}footer a{color:var(--purple-light);text-decoration:none}
+    @media(max-width:640px){.nav-links{display:none}.stats{gap:24px}}
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <div class="brand">
-        <div class="logo">SF</div>
-        <div>
-          ShortsForge
-          <div class="tagline">Viral YouTube Shorts script generator</div>
-        </div>
-      </div>
-      <button id="copyAll" class="btn secondary" style="padding:10px 14px; font-size:13px;">Copy All</button>
-    </header>
-
-    <section class="hero">
-      <h1>Type a topic. Get 3 viral Shorts scripts in seconds.</h1>
-      <p>Hooks, scripts, titles, hashtags, and scene-by-scene breakdowns — optimized for the US audience.</p>
-      <div class="input-row">
-        <input id="topic" type="text" placeholder='e.g. "Elon Musk", "Ancient Egypt", "Money facts"' autocomplete="off" />
-        <button id="generate" class="btn">
-          <span id="btnText">Generate Shorts</span>
-          <span id="btnSpinner" style="display:none;">
-            <span class="dot" style="display:inline-block; width:6px; height:6px; margin: 0 1px;"></span>
-            <span class="dot" style="display:inline-block; width:6px; height:6px; margin: 0 1px;"></span>
-            <span class="dot" style="display:inline-block; width:6px; height:6px; margin: 0 1px;"></span>
-          </span>
-        </button>
-      </div>
-      <div class="chips" id="chips">
-        <span class="chip">Elon Musk</span>
-        <span class="chip">Ancient Egypt</span>
-        <span class="chip">Money facts</span>
-        <span class="chip">Mind tricks</span>
-        <span class="chip">Black holes</span>
-        <span class="chip">Ninjas</span>
-        <span class="chip">Self-discipline</span>
-      </div>
-
-      <div id="loader" class="loader">
-        <div class="think">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span>AI is forging viral scripts…</span>
-        </div>
-        <div class="progress"><div id="progressBar"></div></div>
-        <div class="think-line" id="thinkLine">Analyzing your topic…</div>
-      </div>
-    </section>
-
-    <section id="results" class="results">
-      <div class="toolbar">
-        <h2 id="resultsTitle">Your viral shorts</h2>
-        <div class="tabs" id="tabs">
-          <button class="tab active" data-i="0">Variation 1</button>
-          <button class="tab" data-i="1">Variation 2</button>
-          <button class="tab" data-i="2">Variation 3</button>
-        </div>
-      </div>
-      <div id="variations"></div>
-    </section>
-
-    <footer>Built with vanilla HTML, CSS &amp; JS · Optimized for vertical 9:16 · Made for creators</footer>
-  </div>
-
-  <div id="toast" class="toast">Copied!</div>
-
+<nav><div class="logo">⚡ ShortsForgeAI</div><div class="nav-links"><a href="#how">How It Works</a><a href="#generator">Try Free</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#pricing" class="btn-nav">Get Max — $5/mo</a></div></nav>
+<div class="hero"><div class="badge">✨ AI-Powered YouTube Shorts Scripts</div><h1>Generate <span>Viral Shorts Scripts</span><br/>in Under 10 Seconds</h1><p>Stop staring at a blank screen. ShortsForgeAI creates scroll-stopping scripts for your YouTube Shorts — optimized for retention, hooks, and growth.</p><div class="hero-btns"><a href="#generator" class="btn-primary">Try It Free →</a><a href="#pricing" class="btn-secondary">See Plans</a></div></div>
+<div class="stats"><div class="stat"><div class="stat-num">50K+</div><div class="stat-label">Scripts Generated</div></div><div class="stat"><div class="stat-num">3</div><div class="stat-label">Variations</div></div><div class="stat"><div class="stat-num">&lt;10s</div><div class="stat-label">Generation Time</div></div><div class="stat"><div class="stat-num">$5</div><div class="stat-label">Unlimited Plan</div></div></div>
+<section id="how"><div class="section-label">How It Works</div><h2 class="section-title">3 Steps to Viral Content</h2><p class="section-sub">No experience needed.</p><div class="steps"><div class="step"><div class="step-num">1</div><h3>Enter Your Topic</h3><p>Type any topic — mysteries, finance, motivation, history.</p></div><div class="step"><div class="step-num">2</div><h3>Pick Your Style</h3><p>Educational, shocking, or motivational tone.</p></div><div class="step"><div class="step-num">3</div><h3>Get 3 Scripts</h3><p>Receive 3 unique variations. Pick the best one and record.</p></div></div></section>
+<section id="features"><div class="section-label">Features</div><h2 class="section-title">Everything You Need to Grow</h2><p class="section-sub">Built for YouTube Shorts creators who want results.</p><div class="features-grid"><div class="feature"><div class="feature-icon">🎯</div><h3>Hook-First Writing</h3><p>Every script starts with a hook to stop the scroll in 3 seconds.</p></div><div class="feature"><div class="feature-icon">⚡</div><h3>Instant Generation</h3><p>Scripts ready in under 10 seconds, 24/7.</p></div><div class="feature"><div class="feature-icon">🔀</div><h3>3 Unique Variations</h3><p>Three angles on the same topic to test what performs best.</p></div><div class="feature"><div class="feature-icon">📈</div><h3>Retention Optimized</h3><p>Structured to maximize watch time — the #1 YouTube algorithm factor.</p></div><div class="feature"><div class="feature-icon">🌍</div><h3>Any Niche</h3><p>Mystery, finance, fitness, history, motivation — works for all.</p></div><div class="feature"><div class="feature-icon">💰</div><h3>Monetization Ready</h3><p>Designed to help you hit 1K subs and unlock YPP faster.</p></div></div></section>
+<div class="generator-wrap" id="generator"><div class="generator-inner"><div class="section-label" style="text-align:center">Live Demo</div><h2 class="section-title">Try It Now — Free</h2><p class="section-sub">Free plan: 1 script variation. Upgrade for all 3.</p><div class="gen-box"><label>Your Topic</label><input type="text" id="topicInput" placeholder="e.g. Secrets of the pyramids, Elon Musk habits..."/><label>Script Style</label><select id="styleSelect"><option value="mystery">🔮 Mystery &amp; Shocking</option><option value="motivation">💪 Motivational</option><option value="educational">📚 Educational Facts</option><option value="billionaire">💰 Billionaire Mindset</option></select><button class="gen-btn" onclick="generateScript()">⚡ Generate Scripts</button><div id="outputArea" style="margin-top:28px;display:none"><div class="tabs"><div class="tab active" id="tab1" onclick="showTab(1)">Variation 1</div><div class="tab" id="tab2" onclick="showUpgrade()">Variation 2 🔒</div><div class="tab" id="tab3" onclick="showUpgrade()">Variation 3 🔒</div></div><div class="output-box" id="scriptOutput"></div><div class="upgrade-gate" id="upgradeGate"><h4>🔒 Unlock All 3 Variations</h4><p>Get unlimited scripts with all 3 variations for just $5/month.</p><a href="mailto:josephsskaf@gmail.com?subject=ShortsForgeAI Max Plan&body=Hi! I want the Max Plan ($5/month)." class="btn-primary" style="display:inline-block;padding:12px 28px;font-size:.9rem;margin-top:8px">Get Max Plan — $5/mo →</a></div></div></div></div></div>
+<section id="pricing"><div class="section-label">Pricing</div><h2 class="section-title">Simple, Transparent Pricing</h2><p class="section-sub">Start free. Upgrade when ready to scale.</p><div class="pricing-grid"><div class="plan"><div class="plan-name">Free</div><div class="plan-price">$0<span>/mo</span></div><div class="plan-desc">Perfect to try it out</div><ul class="plan-features"><li><span class="check">✓</span> 1 script variation per topic</li><li><span class="check">✓</span> All niches &amp; styles</li><li><span class="check">✓</span> Instant generation</li><li><span class="cross">✗</span> 3 variations per topic</li><li><span class="cross">✗</span> Priority support</li></ul><a href="#generator" class="btn-plan btn-plan-free">Try Free</a></div><div class="plan featured"><div class="plan-badge">⚡ Most Popular</div><div class="plan-name">Max</div><div class="plan-price">$5<span>/mo</span></div><div class="plan-desc">For serious creators who want to grow fast</div><ul class="plan-features"><li><span class="check">✓</span> <strong>Unlimited</strong> scripts</li><li><span class="check">✓</span> <strong>3 variations</strong> per topic</li><li><span class="check">✓</span> All niches &amp; styles</li><li><span class="check">✓</span> Instant generation</li><li><span class="check">✓</span> Priority email support</li></ul><a href="mailto:josephsskaf@gmail.com?subject=ShortsForgeAI Max Plan&body=Hi! I want the Max Plan ($5/month)." class="btn-plan btn-plan-paid">Get Max Plan →</a></div></div></section>
+<section style="background:var(--dark2);max-width:100%;padding:80px 24px"><div style="max-width:1100px;margin:0 auto"><div class="section-label">Testimonials</div><h2 class="section-title">Creators Love ShortsForgeAI</h2><p class="section-sub">Join thousands of creators growing with AI scripts.</p><div class="testimonials"><div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"I went from 0 to 8K subscribers in 3 months. Saves me 2 hours every day."</p><div style="font-weight:700;font-size:.88rem">Marcus R.</div><div style="color:var(--muted);font-size:.78rem">Finance Creator · 8.2K subs</div></div><div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"My first viral Short hit 2.3M views. This tool paid for itself 1000x over."</p><div style="font-weight:700;font-size:.88rem">Priya K.</div><div style="color:var(--muted);font-size:.78rem">Mystery Channel · 42K subs</div></div><div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"$5/month for unlimited scripts? Less than a coffee. My channel is exploding."</p><div style="font-weight:700;font-size:.88rem">Alex T.</div><div style="color:var(--muted);font-size:.78rem">Motivation Creator · 15K subs</div></div></div></div></section>
+<section id="faq"><div class="section-label">FAQ</div><h2 class="section-title">Common Questions</h2><div class="faq"><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is ShortsForgeAI? <span class="faq-icon">+</span></div><div class="faq-a">An AI-powered script generator for YouTube Shorts. Enter a topic, get ready-to-record scripts.</div></div><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I pay for Max Plan? <span class="faq-icon">+</span></div><div class="faq-a">Click "Get Max Plan" and email us. We reply within 24h. We accept PayPal, PIX, and credit cards.</div></div><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many scripts per month? <span class="faq-icon">+</span></div><div class="faq-a">Max Plan is truly unlimited. Free plan: 1 variation per topic.</div></div><div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime? <span class="faq-icon">+</span></div><div class="faq-a">Yes. Email us and we cancel immediately. No questions asked.</div></div></div></section>
+<div class="final-cta"><h2>Ready to Go Viral?</h2><p>Join thousands of creators generating scripts in seconds.</p><div class="hero-btns" style="justify-content:center;margin-top:36px"><a href="#generator" class="btn-primary">Try Free Now →</a><a href="mailto:josephsskaf@gmail.com?subject=ShortsForgeAI Max Plan&body=Hi! I want the Max Plan ($5/month)." class="btn-secondary">Get Max — $5/mo</a></div></div>
+<footer><p>© 2026 ShortsForgeAI · <a href="mailto:josephsskaf@gmail.com">Contact</a> · Built for creators who want to grow 🚀</p></footer>
 <script>
-(() => {
-  // ---------- Data banks ----------
-  const HOOK_TEMPLATES = [
-    t => `Stop scrolling. What you're about to learn about ${t} will break your brain.`,
-    t => `99% of people have NO idea this happened with ${t}…`,
-    t => `This ${t} secret was hidden for a reason.`,
-    t => `Here's the truth about ${t} nobody told you.`,
-    t => `Wait — ${t} did WHAT?!`,
-    t => `If this ${t} fact doesn't shock you, nothing will.`,
-    t => `They tried to bury this story about ${t}.`,
-    t => `Imagine if everything you knew about ${t} was a lie.`,
-    t => `${t} just changed the game forever — and you missed it.`,
-    t => `Don't tell anyone I told you this about ${t}.`
-  ];
-
-  const TITLE_TEMPLATES = [
-    t => `The ${t} Secret No One Talks About 🤯`,
-    t => `${t}: 60 Seconds That Will Blow Your Mind`,
-    t => `You Won't Believe What ${t} Did Next…`,
-    t => `The Dark Truth Behind ${t} 😳`,
-    t => `${t} Facts That Sound Fake (But Aren't)`,
-    t => `Why ${t} Is The Wildest Thing Ever`,
-    t => `${t} Explained In 60 Seconds`,
-    t => `The ${t} Story They Don't Want You To Hear`,
-    t => `${t}: This Will Change How You See Everything`,
-    t => `${t} — The Untold Story 🔥`
-  ];
-
-  const DESC_TEMPLATES = [
-    t => `Mind-blowing facts about ${t} you won't hear anywhere else. Watch till the end — the last one is INSANE. 🔥 Like & subscribe for daily Shorts that make you smarter in 60 seconds.`,
-    t => `${t} like you've never seen before. If you found this surprising, share it with someone who NEEDS to know. New Shorts every day. 🚀`,
-    t => `The truth about ${t} in under 60 seconds. Drop a 🤯 if this rewired your brain. Follow for more secrets, stories, and shocking facts.`,
-    t => `Quick deep-dive into ${t}. Want more like this? Hit follow — we post the wildest stories every single day. 💥`
-  ];
-
-  const HASHTAG_BANK = [
-    "#shorts","#viral","#fyp","#facts","#mindblown","#didyouknow",
-    "#history","#science","#motivation","#story","#trending","#youtubeshorts",
-    "#explained","#shocking","#trueStory","#crazyFacts","#hiddenTruth","#mustWatch"
-  ];
-
-  const TRANSITIONS = [
-    "But here's where it gets crazy.",
-    "Now hold on — this is the wild part.",
-    "And then? Plot twist.",
-    "Wait. It gets better.",
-    "Stay with me — this is huge.",
-    "Here's the kicker."
-  ];
-
-  const CTA_TEMPLATES = [
-    "Follow for more facts that hit different.",
-    "Comment 🔥 if this blew your mind. Follow for more.",
-    "Share this with someone who NEEDS to know.",
-    "Hit follow — tomorrow's Short is even crazier.",
-    "Save this. Watch it again. Then follow."
-  ];
-
-  const BODY_BEATS = [
-    t => `Most people think they know ${t}. They don't.`,
-    t => `Back in the day, ${t} was nothing like what you see today.`,
-    t => `Scientists studied ${t} for decades — and the results were terrifying.`,
-    t => `Here's a fact that flipped my brain: ${t} was once considered impossible.`,
-    t => `One simple decision turned ${t} into a global phenomenon.`,
-    t => `Insiders revealed something about ${t} that nobody expected.`,
-    t => `The numbers behind ${t} are insane — and almost nobody talks about them.`,
-    t => `What if I told you ${t} has been hiding in plain sight?`
-  ];
-
-  const VISUAL_BEATS = [
-    "Fast zoom-in on subject, bold text overlay, punchy sound effect (whoosh).",
-    "Split-screen comparison, red circle highlight, suspense music swells.",
-    "Dramatic black-and-white archive footage, slow zoom, low rumble.",
-    "Quick cut montage (3 clips, 0.5s each), beat drop on the last frame.",
-    "Text smashes onto screen letter-by-letter, glitch transition.",
-    "Top-down b-roll with kinetic captions, upbeat trap beat in background.",
-    "Close-up reaction shot, pause for half a second — then reveal.",
-    "Stylized infographic appears, numbers animate up rapidly.",
-    "Smooth whip-pan to next scene, drum hit on landing."
-  ];
-
-  // ---------- Utility ----------
-  const rng = (seed) => {
-    let s = seed >>> 0;
-    return () => {
-      s = (s * 1664525 + 1013904223) >>> 0;
-      return s / 0xffffffff;
-    };
-  };
-  const pick = (arr, r) => arr[Math.floor(r() * arr.length)];
-  const pickN = (arr, n, r) => {
-    const copy = arr.slice();
-    const out = [];
-    for (let i = 0; i < n && copy.length; i++) {
-      const idx = Math.floor(r() * copy.length);
-      out.push(copy.splice(idx, 1)[0]);
-    }
-    return out;
-  };
-  const titleCase = s => s.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase());
-
-  // ---------- Generation ----------
-  function buildVariation(rawTopic, variationIndex) {
-    const topic = titleCase(rawTopic.trim());
-    const seed = (hashStr(topic) + variationIndex * 9973) >>> 0;
-    const r = rng(seed);
-
-    const hook = pick(HOOK_TEMPLATES, r)(topic);
-    const titleStr = pick(TITLE_TEMPLATES, r)(topic);
-    const description = pick(DESC_TEMPLATES, r)(topic);
-    const hashtags = pickN(HASHTAG_BANK, 5, r);
-
-    // Build scenes (5 scenes, ~10s each = ~50s total + outro)
-    const beat1 = pick(BODY_BEATS, r)(topic);
-    const beat2 = pick(BODY_BEATS, r)(topic);
-    const beat3 = pick(BODY_BEATS, r)(topic);
-    const transition = pick(TRANSITIONS, r);
-    const cta = pick(CTA_TEMPLATES, r);
-
-    const scenes = [
-      {
-        time: "0:00 – 0:03",
-        label: "HOOK",
-        vo: hook,
-        visual: pick(VISUAL_BEATS, r)
-      },
-      {
-        time: "0:03 – 0:12",
-        label: "SETUP",
-        vo: beat1,
-        visual: pick(VISUAL_BEATS, r)
-      },
-      {
-        time: "0:12 – 0:25",
-        label: "REVEAL",
-        vo: `${transition} ${beat2}`,
-        visual: pick(VISUAL_BEATS, r)
-      },
-      {
-        time: "0:25 – 0:40",
-        label: "PAYOFF",
-        vo: beat3,
-        visual: pick(VISUAL_BEATS, r)
-      },
-      {
-        time: "0:40 – 0:52",
-        label: "TWIST",
-        vo: `And the craziest part about ${topic}? It's still happening today.`,
-        visual: pick(VISUAL_BEATS, r)
-      },
-      {
-        time: "0:52 – 1:00",
-        label: "CTA",
-        vo: cta,
-        visual: "End card with channel handle, subscribe button pulse animation, upbeat sting."
-      }
-    ];
-
-    const fullScript = scenes.map(s => `[${s.time}] ${s.label}: ${s.vo}`).join("\n\n");
-
-    return { topic, hook, title: titleStr, description, hashtags, scenes, fullScript };
-  }
-
-  function hashStr(s) {
-    let h = 2166136261;
-    for (let i = 0; i < s.length; i++) {
-      h ^= s.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return h >>> 0;
-  }
-
-  // ---------- Rendering ----------
-  const variationsEl = document.getElementById("variations");
-  const tabsEl = document.getElementById("tabs");
-  const resultsEl = document.getElementById("results");
-  const resultsTitle = document.getElementById("resultsTitle");
-
-  let currentData = null;
-
-  function renderResults(data) {
-    currentData = data;
-    variationsEl.innerHTML = "";
-    data.forEach((v, i) => {
-      const wrap = document.createElement("div");
-      wrap.className = "variation" + (i === 0 ? " active" : "");
-      wrap.dataset.i = i;
-      wrap.innerHTML = renderVariation(v, i);
-      variationsEl.appendChild(wrap);
-    });
-    bindCopyButtons();
-    resultsEl.classList.add("show");
-    resultsTitle.textContent = `Your viral shorts on "${data[0].topic}"`;
-    setTimeout(() => resultsEl.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
-    }[c]));
-  }
-
-  function renderVariation(v, i) {
-    const scenesHtml = v.scenes.map(s => `
-      <div class="scene">
-        <div class="head"><span>${escapeHtml(s.time)} · ${escapeHtml(s.label)}</span></div>
-        <div class="vo">${escapeHtml(s.vo)}</div>
-        <div class="visual">🎬 ${escapeHtml(s.visual)}</div>
-      </div>`).join("");
-
-    return `
-      <div class="card hook">
-        <h3><span class="label"><span class="icon">H</span> Hook (first 3 seconds)</span>
-          <button class="btn secondary" data-copy="hook" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${escapeHtml(v.hook)}</div>
-      </div>
-
-      <div class="card title">
-        <h3><span class="label"><span class="icon">T</span> Suggested viral title</span>
-          <button class="btn secondary" data-copy="title" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${escapeHtml(v.title)}</div>
-      </div>
-
-      <div class="card script">
-        <h3><span class="label"><span class="icon">S</span> Full script (30–60s)</span>
-          <button class="btn secondary" data-copy="script" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${escapeHtml(v.fullScript)}</div>
-      </div>
-
-      <div class="card desc">
-        <h3><span class="label"><span class="icon">D</span> Video description</span>
-          <button class="btn secondary" data-copy="desc" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${escapeHtml(v.description)}</div>
-      </div>
-
-      <div class="card hashtags">
-        <h3><span class="label"><span class="icon">#</span> Hashtags</span>
-          <button class="btn secondary" data-copy="hashtags" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${escapeHtml(v.hashtags.join(" "))}</div>
-      </div>
-
-      <div class="card scenes">
-        <h3><span class="label"><span class="icon">🎞</span> Scene-by-scene breakdown (for InVideo / Pictory / Runway)</span>
-          <button class="btn secondary" data-copy="scenes" data-i="${i}">Copy</button>
-        </h3>
-        <div class="body">${scenesHtml}</div>
-      </div>
-    `;
-  }
-
-  function bindCopyButtons() {
-    document.querySelectorAll("[data-copy]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const i = +btn.dataset.i;
-        const kind = btn.dataset.copy;
-        const v = currentData[i];
-        let text = "";
-        switch (kind) {
-          case "hook": text = v.hook; break;
-          case "title": text = v.title; break;
-          case "script": text = v.fullScript; break;
-          case "desc": text = v.description; break;
-          case "hashtags": text = v.hashtags.join(" "); break;
-          case "scenes":
-            text = v.scenes.map(s => `[${s.time}] ${s.label}\nVO: ${s.vo}\nVISUAL: ${s.visual}`).join("\n\n");
-            break;
-        }
-        copy(text);
-      });
-    });
-  }
-
-  // ---------- Copy helpers ----------
-  const toast = document.getElementById("toast");
-  let toastTimer;
-  function showToast(msg) {
-    toast.textContent = msg;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("show"), 1400);
-  }
-  function copy(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(() => showToast("Copied!"));
-    } else {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed"; ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand("copy"); showToast("Copied!"); }
-      catch { showToast("Copy failed"); }
-      document.body.removeChild(ta);
-    }
-  }
-
-  // ---------- Tabs ----------
-  tabsEl.addEventListener("click", e => {
-    const t = e.target.closest(".tab");
-    if (!t) return;
-    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
-    t.classList.add("active");
-    const i = t.dataset.i;
-    document.querySelectorAll(".variation").forEach(v => v.classList.remove("active"));
-    const v = document.querySelector(`.variation[data-i="${i}"]`);
-    if (v) v.classList.add("active");
-  });
-
-  // ---------- Chips ----------
-  document.getElementById("chips").addEventListener("click", e => {
-    const c = e.target.closest(".chip");
-    if (!c) return;
-    document.getElementById("topic").value = c.textContent;
-    document.getElementById("topic").focus();
-  });
-
-  // ---------- Generate flow ----------
-  const generateBtn = document.getElementById("generate");
-  const btnText = document.getElementById("btnText");
-  const btnSpinner = document.getElementById("btnSpinner");
-  const loader = document.getElementById("loader");
-  const progressBar = document.getElementById("progressBar");
-  const thinkLine = document.getElementById("thinkLine");
-  const topicInput = document.getElementById("topic");
-
-  const THINK_STEPS = [
-    "Analyzing your topic…",
-    "Studying viral hooks for US audiences…",
-    "Drafting attention-grabbing openers…",
-    "Structuring the 60-second arc…",
-    "Polishing the script for maximum retention…",
-    "Generating titles and hashtags…",
-    "Building scene-by-scene breakdowns…",
-    "Final pass — making it punchy."
-  ];
-
-  function startLoading() {
-    generateBtn.disabled = true;
-    btnText.textContent = "Generating";
-    btnSpinner.style.display = "inline-flex";
-    loader.classList.add("show");
-    progressBar.style.width = "0%";
-  }
-  function stopLoading() {
-    generateBtn.disabled = false;
-    btnText.textContent = "Generate Shorts";
-    btnSpinner.style.display = "none";
-    loader.classList.remove("show");
-  }
-
-  function runFakeThink(durationMs) {
-    return new Promise(resolve => {
-      const start = Date.now();
-      let stepIdx = 0;
-      thinkLine.textContent = THINK_STEPS[0];
-      const stepInterval = setInterval(() => {
-        stepIdx = (stepIdx + 1) % THINK_STEPS.length;
-        thinkLine.textContent = THINK_STEPS[stepIdx];
-      }, 350);
-      const tick = setInterval(() => {
-        const pct = Math.min(100, ((Date.now() - start) / durationMs) * 100);
-        progressBar.style.width = pct + "%";
-        if (pct >= 100) {
-          clearInterval(tick);
-          clearInterval(stepInterval);
-          resolve();
-        }
-      }, 60);
-    });
-  }
-
-  async function generate() {
-    const topic = topicInput.value.trim();
-    if (!topic) {
-      topicInput.focus();
-      showToast("Type a topic first!");
-      return;
-    }
-    startLoading();
-    await runFakeThink(1800 + Math.random() * 800);
-    const data = [0,1,2].map(i => buildVariation(topic, i));
-    renderResults(data);
-    stopLoading();
-  }
-
-  generateBtn.addEventListener("click", generate);
-  topicInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") generate();
-  });
-
-  // ---------- Copy All ----------
-  document.getElementById("copyAll").addEventListener("click", () => {
-    if (!currentData) { showToast("Generate a script first!"); return; }
-    const out = currentData.map((v, idx) => {
-      const sceneText = v.scenes.map(s => `  [${s.time}] ${s.label}\n  VO: ${s.vo}\n  VISUAL: ${s.visual}`).join("\n\n");
-      return [
-        `=== VARIATION ${idx + 1} — ${v.topic} ===`,
-        ``,
-        `HOOK:\n${v.hook}`,
-        ``,
-        `TITLE:\n${v.title}`,
-        ``,
-        `DESCRIPTION:\n${v.description}`,
-        ``,
-        `HASHTAGS:\n${v.hashtags.join(" ")}`,
-        ``,
-        `FULL SCRIPT:\n${v.fullScript}`,
-        ``,
-        `SCENE BREAKDOWN:\n${sceneText}`
-      ].join("\n");
-    }).join("\n\n----------------------------------------\n\n");
-    copy(out);
-  });
-})();
+const S={mystery:['[HOOK] This place was hidden from Google Maps for 47 years.\n\n[BODY] In 1977, a small Nevada town disappeared from records. No satellite images. GPS failed within 3 miles. Government files confirm 2,400 residents — gone.\n\n[CTA] Follow for mysteries the world tries to hide. 👁️','[HOOK] Scientists recorded a sound from the bottom of the ocean nobody can explain.\n\n[BODY] 1997: NOAA detected an ultra-low frequency sound across 5,000 miles. "The Bloop." No known match. Original source? Still unknown.\n\n[CTA] Comment which mystery shocks you most 👇','[HOOK] A Vatican room unopened since 1929 — even the Pope has no key.\n\n[BODY] "The Cartulary of Silence." Three Popes requested access. All denied.\n\n[CTA] Follow for the truth they hide. 📜'],motivation:['[HOOK] You are not lazy. You are running on the wrong fuel.\n\n[BODY] Motivation shows up AFTER you start. Action creates motivation. Stop waiting to feel ready.\n\n[CTA] Follow for daily mindset shifts. 💪','[HOOK] The people winning are not smarter. They just refuse to stop.\n\n[BODY] Consistency beats talent. The creator with 1M subs started with more posts, not better ideas.\n\n[CTA] Follow if you are building something. 🚀','[HOOK] In 5 years you will wish you started today.\n\n[BODY] Post the video. Send the email. Start the business. Small steps = completely different life.\n\n[CTA] Follow for reminders you need to hear. ⏰'],educational:['[HOOK] The human brain processes images 60,000x faster than text.\n\n[BODY] Every second: 11 million bits of input. You are aware of 50. Your instincts — that is the 11 million doing their job.\n\n[CTA] Follow for mind-blowing science facts. 🧠','[HOOK] More possible chess games than atoms in the universe.\n\n[BODY] Chess: 10^120 possible games. Universe atoms: 10^80. A 64-square board has more complexity than all of space. Still unsolved.\n\n[CTA] Follow for facts that break your brain. 🤯','[HOOK] Honey never expires. 3,000-year-old honey found in Egypt — still edible.\n\n[BODY] Low water, acidic pH, hydrogen peroxide — hostile to bacteria. Outlasted every empire.\n\n[CTA] Follow for facts that sound fake but are not. 📚'],billionaire:['[HOOK] Elon Musk does not manage time. He designs it in 5-minute blocks.\n\n[BODY] Timeboxing: every minute assigned. No decision fatigue. Used by Elon, Gates, Cal Newport. Result: 2x output.\n\n[CTA] Follow for top 1% productivity secrets. ⏱️','[HOOK] Warren Buffett reads 500 pages a day — compound interest for the mind.\n\n[BODY] 80% of his day: reading. "Knowledge builds like compound interest." Started age 10. By 30, returns were undeniable.\n\n[CTA] Follow if you invest in yourself. 📚','[HOOK] Jeff Bezos makes zero important decisions after 5pm.\n\n[BODY] Decision fatigue is real. Bezos protects peak mornings. Afternoon: execution. Evening: rest.\n\n[CTA] Follow for billionaire systems you can use. 💡']};
+let C=[],G=0;
+function generateScript(){const t=document.getElementById('topicInput').value.trim(),s=document.getElementById('styleSelect').value;if(!t){alert('Please enter a topic!');return;}G++;C=[...S[s]];document.getElementById('outputArea').style.display='block';document.getElementById('scriptOutput').textContent=C[0];document.getElementById('upgradeGate').style.display='block';document.getElementById('outputArea').scrollIntoView({behavior:'smooth'});}
+function showTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('tab'+n).classList.add('active');document.getElementById('scriptOutput').textContent=C[n-1]||'';}
+function showUpgrade(){document.getElementById('upgradeGate').style.display='block';document.getElementById('upgradeGate').scrollIntoView({behavior:'smooth'});}
+function toggleFaq(el){el.parentElement.classList.toggle('open');}
 </script>
 </body>
 </html>
